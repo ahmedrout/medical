@@ -3,7 +3,7 @@
 $conn = mysqli_connect(DB_SERVERNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
 
 
-// getOne row by id
+// getOne
 function getOne(string $table, string $where): array
 {
   global $conn;
@@ -16,30 +16,58 @@ function getOne(string $table, string $where): array
   } else {
     return [];
   }
-}
+}                   
 
-function getAll (string $table) : array
+function getAll(string $table): array 
 {
   global $conn;
   
   $sql = "SELECT * FROM $table";
-  $result = mysqli_query($conn, $sql); 
+  $result = mysqli_query($conn, $sql);
+
   if (mysqli_num_rows($result) > 0) {
-    return mysqli_fetch_assoc($result);
+    return mysqli_fetch_all($result, MYSQLI_ASSOC);
   } else {
     return [];
   }
 }
 
-function insert(string $table, string $data) : bool
+function insert(string $table, array $data) 
 {
   global $conn;
+  $keys = '';
+  $values = '';
 
-  $sql = "INSERT INTO $table $data";
-echo $sql;
-  if (mysqli_query($conn, $sql)) {
-    return true;
-  } else {
-    return false;
+  foreach ($data as $key => $value) {
+    $keys .= "$key,";
+    $values .= "'$value',";
   }
+
+  $keys = substr($keys, 0, -1);
+  $values = substr($values, 0, -1);
+
+  $sql = "INSERT INTO $table ($keys) VALUES ($values)";
+
+  return mysqli_query($conn, $sql);
 }
+
+function update(string $table, array $data, string $where) 
+{
+  global $conn;
+  $set = '';
+
+  foreach ($data as $key => $value) {
+    $set .= "$key = '$value',";
+  }
+
+  $set = substr($set, 0, -1);
+
+  $sql = "UPDATE $table SET $set WHERE $where";
+
+  return mysqli_query($conn, $sql);
+}
+
+// UPDATE cities set city_name = 'cairo',
+// city_is_active = 1,
+
+// where city_id = 
