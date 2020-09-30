@@ -13,8 +13,8 @@ define("CORE", ROOT . "core/");
 define("INC", ROOT . "inc/");
 
 //site path
-define("URL", "http://localhost/medical_design/");
-define("AURL", "http://localhost/medical_design/admin/");
+define("URL", "http://medical.local/");
+define("AURL", "http://medical.local/admin/");
 
 // site title 
 define("SITE_TITLE", "Medical Service"); 
